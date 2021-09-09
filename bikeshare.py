@@ -124,6 +124,7 @@ def time_stats(df):
 
 def station_stats(df):
     """Displays statistics on the most popular stations and trip."""
+    pd.set_option('display.max_columns',200)
 
     print('\nCalculating Statistics...\n')
     start_time = time.time()
@@ -134,6 +135,11 @@ def station_stats(df):
     # display most commonly used end station
     print(' What is the most popular End Station?\n', df['End Station'].mode()[0])
 
+    # calculated the most common route.
+    group_stations = df[['Start Station', 'End Station']].groupby(['Start Station', 'End Station'])
+    combination = group_stations.size().sort_values().nlargest(1)
+    print(' What are the most frequent combination of start station and end station?')
+    print(' ',combination)
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -204,21 +210,16 @@ def individual_trip_stats(df):
     print('\nDisplaying Raw Data...\n')
     start_time = time.time()
 
+    # the value of variable i will be updated each time.
+    i = 0
     while True:
-        try:
-            individual_trip=input("Would you like to view individual trip data? datatype 'yes' or 'no'\n")
+        display_data=input("Would you like to see 5 lines of raw data? Enter 'yes' or 'no'\n")
 
-            each_time=5
-            while individual_trip.lower() == 'yes':
-                print(df.head(each_time))
-                each_time+=5
-                individual_trip=input("Would you like to view individual trip data? Type 'yes' or 'no'\n")
-
-            if individual_trip.lower() == 'no':
-                break
-        except Exception as e:
-            print(e)
-
+        if display_data.lower() == 'yes':
+            print(df.iloc[i:i+5])
+            i += 5 # update i by adding 5
+        else:
+            break
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
