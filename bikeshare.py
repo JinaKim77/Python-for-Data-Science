@@ -6,6 +6,7 @@ CITY_DATA = { 'chicago': 'chicago.csv',
               'new york': 'new_york_city.csv',
               'washington': 'washington.csv' }
 
+
 def get_filters():
     """
     Asks user to specify a city, month, and day to analyze.
@@ -135,7 +136,7 @@ def station_stats(df):
     # display most commonly used end station
     print(' What is the most popular End Station?\n', df['End Station'].mode()[0])
 
-    # calculated the most common route.
+    # calculated the most common route (the most frequent combination of start station and end station)
     group_stations = df[['Start Station', 'End Station']].groupby(['Start Station', 'End Station'])
     combination = group_stations.size().sort_values().nlargest(1)
     print(' What are the most frequent combination of start station and end station?')
@@ -180,6 +181,7 @@ def user_stats(df):
 
     # Display counts of gender
     print('\nWhat is the breakdown of gender?\n')
+
     if 'Gender' in df:
         print(df['Gender'].value_counts())
     else:
@@ -195,6 +197,7 @@ def user_stats(df):
 
     # Display earliest, most recent, and most common year of birth
     print('\nWhat is the oldest, youngest, and most popular year of birth, respectively?\n')
+
     if 'Birth Year' in df:
         print(' Oldest year of birth: {}\n Youngest year of birth: {}\n The most Popular year of birth: {}\n'.format(df['Birth Year'].min(), df['Birth Year'].max(), df['Birth Year'].mode()[0]))
     else:
@@ -203,6 +206,7 @@ def user_stats(df):
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
+
 
 def individual_trip_stats(df):
     """Raw data is displayed upon request"""
@@ -215,14 +219,17 @@ def individual_trip_stats(df):
     while True:
         display_data=input("Would you like to see 5 lines of raw data? Enter 'yes' or 'no'\n")
 
+        # Display 5 different rows each rotation whenever a user types yes
         if display_data.lower() == 'yes':
             print(df.iloc[i:i+5])
-            i += 5 # update i by adding 5
+            # update i by adding 5
+            i += 5
         else:
             break
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
+
 
 def main():
     while True:
